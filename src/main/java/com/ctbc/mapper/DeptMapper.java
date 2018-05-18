@@ -1,6 +1,7 @@
 package com.ctbc.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,6 +26,11 @@ public interface DeptMapper {
 
 	public abstract List<DeptVO> getAll();
 	
+	public abstract List<DeptVO> getDeptByIdList(@Param("deptIdList") List<Integer> idList);
+	
 	public abstract DeptVO getDeptById(@Param("deptIdGGG") int deptId);
 	
+	public abstract DeptVO getDeptByIdMap(@Param("deptMap") Map<String, String> deptMap);
+	
+	public abstract int addDept(@Param("deptVOGGG") DeptVO deptVO);
 }

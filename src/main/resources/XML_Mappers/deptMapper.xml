@@ -23,8 +23,25 @@
 	<select id="getDeptById" parameterType="int" resultMap="resultMapDept">
 		SELECT * FROM z40180_deptTB WHERE deptno = #{ deptIdGGG }
 	</select>
+	
+	<select id="getDeptByIdMap" parameterType="java.util.Map" resultMap="resultMapDept">
+		SELECT * FROM z40180_deptTB WHERE deptno = #{ deptMap.deptNumber }
+	</select>
 
+	<select id="getDeptByIdList" parameterType="java.util.List" resultMap="resultMapDept">
+		SELECT * FROM z40180_deptTB  
+		<where>
+			deptno IN 
+			<foreach item="item" collection="deptIdList" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
 
+	<insert id="addDept" parameterType="fuckDeptVO">
+		INSERT INTO z40180_deptTB ( 'dname' , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
+	</insert>
+	
 </mapper>  
 
 

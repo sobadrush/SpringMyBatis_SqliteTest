@@ -14,6 +14,10 @@
         <junit-version>4.12</junit-version>
         <spring-version>4.3.16.RELEASE</spring-version>
         <sqlite-version>3.8.11.2</sqlite-version>
+        <myBatis-version>3.4.1</myBatis-version>
+        <myBatis-spring-version>1.3.1</myBatis-spring-version>
+        <apache-common-ver>3.4</apache-common-ver>
+        <log4j-version>1.2.17</log4j-version>
     </properties>
 
     <dependencies>
@@ -24,6 +28,13 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
+        
+		<!-- LOG4J -->
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>${log4j-version}</version>
+		</dependency>
 
 		<!-- JUNIT -->
 		<dependency>
@@ -40,7 +51,6 @@
 		    <version>${spring-version}</version>
 		    <scope>test</scope>
 		</dependency>
-        
         
         <!-- SQLITE-JDBC -->
 		<dependency>
@@ -63,6 +73,26 @@
 		    <version>${spring-version}</version>
 		</dependency>
         
+        <!-- MYBATIS -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>${myBatis-version}</version>
+		</dependency>
+        
+        <!-- MYBATIS-SPRING -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>${myBatis-spring-version}</version>
+		</dependency>
+        
+        <!-- COMMONS-LANG3 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${apache-common-ver}</version>
+		</dependency>
         
     </dependencies>
     <build>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- http://limingnihao.iteye.com/blog/781878 -->
+<!-- http://www.cnblogs.com/sin90lzc/archive/2012/06/30/2571175.html -->
+<!-- https://my.oschina.net/wangrikui/blog/510189 -->
+<!-- http://computerdragon.blog.51cto.com/6235984/1399742 -->
+
+<mapper namespace="com.ctbc.mapper.DeptMapper">  <!-- "必須"對應 mapper interface 所在的包 -->
+	
+	
+<!-- <resultMap id="resultMapDept" type="com.ctbc.model.vo.DeptVO"> -->
+	<resultMap id="resultMapDept" type="fuckDeptVO">
+		<id property="deptNo" column="deptno"/>
+		<result property="deptName" column="dname"/>
+		<result property="deptLoc" column="loc"/>
+	</resultMap>
+    
+    <select id="getAll" resultMap="resultMapDept">  
+       SELECT * FROM z40180_deptTB 
+    </select>  
+    
+	<select id="getDeptById" parameterType="int" resultMap="resultMapDept">
+		SELECT * FROM z40180_deptTB WHERE deptno = #{ deptIdGGG }
+	</select>
+
+
+</mapper>  
+
+
+
+
+
+
+

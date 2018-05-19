@@ -1,7 +1,5 @@
 package _01_Config;
 
-import java.util.Properties;
-
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -36,12 +35,14 @@ public class RootConfig {
 
 	@Bean(name = "driverManagerDS")
 	public DataSource driverManagerDatasource() {
-		Properties props = new Properties();
-		props.setProperty("allowMultiQueries", "true");
 		String connectionString = "jdbc:sqlite:" + System.getProperty("user.dir") + "/" + "testDB.db";
-		DriverManagerDataSource ds = new DriverManagerDataSource(connectionString, props);
-		ds.setUrl(connectionString); // allowMultiQueries=true
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setUrl(connectionString);
 		ds.setDriverClassName("org.sqlite.JDBC");
+		// ------------------------------------------
+//		Properties props = new Properties();
+//		props.setProperty("allowMultiQueries", "true");
+//		ds.setConnectionProperties(props); // allowMultiQueries=true
 		return ds;
 	}
 
@@ -86,6 +87,7 @@ public class RootConfig {
 		System.out.println("啟用連線池：" + ds);
 		final SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 		sqlSessionFactory.setDataSource(ds);
+		sqlSessionFactory.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
 		//sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:META-INF/mybatis/mappers/**/*.xml"));
 		//sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:com/ctbc/model/vo/**.xml"));
 		sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:XML_Mappers/*.xml"));

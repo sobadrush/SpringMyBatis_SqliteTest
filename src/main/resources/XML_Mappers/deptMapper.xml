@@ -78,14 +78,32 @@
 			UPDATE z40180_deptTB
 			 <set>  
 			 	<if test=" itemDept.deptName != null and itemDept.deptLoc != null ">
-			    	dname = #{ itemDept.deptName },  
-			        loc   = #{ itemDept.deptLoc }
+			    	dname = #{ itemDept.deptName , javaType=String , jdbcType=VARCHAR },  
+			        loc   = #{ itemDept.deptLoc , javaType=String , jdbcType=VARCHAR }
 			 	</if>
 			 </set>  
 			 <where>  
-			 	deptno = #{ itemDept.deptNo }
+			 	deptno = #{ itemDept.deptNo , javaType=int , jdbcType=INTEGER }
 			 </where>  
 		</foreach>  
+	</update>
+	
+	<!-- 批量更新(CASE...WHEN) -->
+	<update id="updateDeptsBatchForSqlite" parameterType="java.util.List">
+		UPDATE z40180_deptTB
+		<trim prefix="SET" suffixOverrides=",">
+			<trim prefix="dname = CASE" suffix="END , ">
+				<foreach item="itemDept" collection="deptList" index="idx">
+					<if test="itemDept.deptName != null">
+						WHEN deptno = #{ itemDept.deptNo } THEN #{ itemDept.deptName }
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		WHERE
+		<foreach item="itemDept" collection="deptList" separator="or" index="idx">
+			deptNo = #{ itemDept.deptNo }
+		</foreach>
 	</update>
 	
 </mapper>  

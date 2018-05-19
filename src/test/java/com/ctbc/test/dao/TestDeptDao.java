@@ -157,9 +157,12 @@ public class TestDeptDao {
 	}
 
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_011() throws SQLException {
+		//
+		// 批量更新, Sqlite會出錯
+		//
 		List<DeptVO> dList = new ArrayList<>();
 		dList.add(new DeptVO(10, "交通部1", "大安區1"));
 		dList.add(new DeptVO(20, "交通部2", "大安區2"));
@@ -167,14 +170,24 @@ public class TestDeptDao {
 		int pen;
 		try {
 			pen = deptMapper.updateDeptsBatch(dList);
-			System.err.println("update batch success : " + pen);
+			System.err.println("update batch success : " + pen + " 筆");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		this.getAll();
 	}
 
+	@Test
+//	@Ignore
+	@Rollback(false)
+	public void test_012() throws SQLException {
+		List<DeptVO> dList = new ArrayList<>();
+		dList.add(new DeptVO(10, "國防部_111", "中正區_111"));
+		dList.add(new DeptVO(20, "國防部_222", "中正區_222"));
+		
+		int pen = deptMapper.updateDeptsBatchForSqlite(dList);
+		System.err.println("update batch success : " + pen + " 筆");
+		this.getAll();
+	}
 }

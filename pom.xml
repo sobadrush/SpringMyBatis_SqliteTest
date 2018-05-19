@@ -37,6 +37,13 @@
 		    <version>${log4j-version}</version>
 		</dependency>
 
+		<!-- SLF4J-SIMPLE -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-simple</artifactId>
+		    <version>1.7.25</version>
+		</dependency>
+
 		<!-- JUNIT -->
 		<dependency>
 		    <groupId>junit</groupId>

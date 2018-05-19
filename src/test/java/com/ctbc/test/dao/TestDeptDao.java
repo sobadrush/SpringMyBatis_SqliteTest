@@ -192,7 +192,7 @@ public class TestDeptDao {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_013() throws SQLException {
 		List<DeptVO> dList = new ArrayList<>();
@@ -204,6 +204,46 @@ public class TestDeptDao {
 		this.getAll();
 	}
 	
+	@Test
+	@Ignore
+	public void test_014() throws SQLException {
+		Map<String, String> rtnMap = deptMapper.getDeptByIdForMap(10);
+		System.err.println(rtnMap.toString());
+	}
+	
+	@Test
+	@Ignore
+	public void test_015() throws SQLException {
+		List<Map<String, String>> rtnList = deptMapper.getAllForMap();
+		for (Map<String, String> hmap : rtnList) {
+			System.out.println(" >>> " + hmap);
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void test_016() throws SQLException {
+		List<DeptVO> deptList = deptMapper.getAllUseAnnotation();
+		for (DeptVO deptVO : deptList) {
+			System.out.println(">>>>>> " + deptVO.toString());
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void test_017() throws SQLException {
+		List<Map<String, String>> rtnList = deptMapper.getAllForMapUseAnnotation();
+		for (Map<String, String> hmap : rtnList) {
+			System.out.println(" >>>>>>>>>>>> " + hmap);
+		}
+	}
+	
+	@Test
+//	@Ignore
+	public void test_018() throws SQLException {
+		Map<String, String> deptMap = deptMapper.getDeptByIdForMapUseAnnotation(40);
+		System.err.println(" >>> " + deptMap.toString());
+	}
 }
 
 

@@ -20,6 +20,14 @@
        SELECT * FROM z40180_deptTB 
     </select>  
     
+    <select id="getAllForMap" resultType="map">
+    	SELECT * FROM z40180_deptTB 
+    </select>
+    
+	<select id="getDeptByIdForMap" parameterType="int" resultType="java.util.Map">
+		SELECT * FROM z40180_deptTB WHERE deptno = #{ deptIdGGG }
+	</select>
+	
 	<select id="getDeptById" parameterType="int" resultMap="resultMapDept">
 		SELECT * FROM z40180_deptTB WHERE deptno = #{ deptIdGGG }
 	</select>

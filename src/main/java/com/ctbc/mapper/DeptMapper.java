@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 import com.ctbc.model.vo.DeptVO;
 
@@ -26,9 +28,13 @@ public interface DeptMapper {
 
 	public abstract List<DeptVO> getAll();
 	
+	public abstract List<Map<String, String>> getAllForMap();
+	
 	public abstract List<DeptVO> getDeptByIdList(@Param("deptIdList") List<Integer> idList);
 	
 	public abstract DeptVO getDeptById(@Param("deptIdGGG") int deptId);
+	
+	public abstract Map<String, String> getDeptByIdForMap(@Param("deptIdGGG") int deptId);
 	
 	public abstract DeptVO getDeptByIdMap(@Param("deptMap") Map<String, String> deptMap);
 	
@@ -44,8 +50,33 @@ public interface DeptMapper {
 	
 	public abstract int updateDeptsBatch(@Param("deptList") List<DeptVO> dList);
 	
+	/**
+	 * 使用CASE... WHEN + <trim>
+	 */
 	public abstract int updateDeptsBatchForSqlite(@Param("deptList") List<DeptVO> dList);
 	
+	/**
+	 * 使用CASE... WHEN + <foreach>
+	 */
 	public abstract int updateDeptsBatchForSqlite2(@Param("deptList") List<DeptVO> dList);
 	
+	//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+	//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+	//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+	@Select("SELECT * FROM z40180_deptTB")
+	@ResultMap(value = {"resultMapDept"})
+	public abstract List<DeptVO> getAllUseAnnotation();
+	
+	@Select("SELECT * FROM z40180_deptTB")
+	public abstract List<Map<String, String>> getAllForMapUseAnnotation();
+	
+	@Select("SELECT * FROM z40180_deptTB WHERE deptno = #{ _deptId }")
+	public abstract Map<String, String> getDeptByIdForMapUseAnnotation(@Param("_deptId") int deptId);
+	
 }
+
+
+
+
+
+

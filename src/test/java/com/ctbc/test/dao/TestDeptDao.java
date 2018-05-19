@@ -179,7 +179,7 @@ public class TestDeptDao {
 	}
 
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_012() throws SQLException {
 		List<DeptVO> dList = new ArrayList<>();
@@ -190,4 +190,20 @@ public class TestDeptDao {
 		System.err.println("update batch success : " + pen + " 筆");
 		this.getAll();
 	}
+	
+	@Test
+//	@Ignore
+	@Rollback(false)
+	public void test_013() throws SQLException {
+		List<DeptVO> dList = new ArrayList<>();
+		dList.add(new DeptVO(30, "交通部_111", "大安區_111"));
+		dList.add(new DeptVO(40, "交通部_222", "大安區_222"));
+		
+		int pen = deptMapper.updateDeptsBatchForSqlite2(dList);
+		System.err.println("update batch success : " + pen + " 筆");
+		this.getAll();
+	}
+	
 }
+
+

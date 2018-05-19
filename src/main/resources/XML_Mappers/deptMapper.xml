@@ -88,7 +88,7 @@
 		</foreach>  
 	</update>
 	
-	<!-- 批量更新(CASE...WHEN) -->
+	<!-- 批量更新(CASE...WHEN) ... 使用 <trim> -->
 	<update id="updateDeptsBatchForSqlite" parameterType="java.util.List">
 		UPDATE z40180_deptTB
 		<trim prefix="SET" suffixOverrides=",">
@@ -106,8 +106,20 @@
 		</foreach>
 	</update>
 	
+	<!-- 批量更新(CASE...WHEN) ... 使用 <foreach> -->
+	<update id="updateDeptsBatchForSqlite2" parameterType="java.util.List">
+		UPDATE z40180_deptTB 
+		SET dname = 
+		<foreach item="item" collection="deptList" index="idx" separator=" " open="CASE" close="END">
+			WHEN deptno = #{ item.deptNo } THEN #{ item.deptName }
+		</foreach>
+		WHERE deptno IN
+		<foreach item="item" collection="deptList" index="idx" open="(" separator="," close=")">
+			#{ item.deptNo , jdbcType = INTEGER }
+		</foreach>
+	</update>
+	
 </mapper>  
-
 
 
 

@@ -46,4 +46,6 @@ public interface DeptMapper {
 	
 	public abstract int updateDeptsBatchForSqlite(@Param("deptList") List<DeptVO> dList);
 	
+	public abstract int updateDeptsBatchForSqlite2(@Param("deptList") List<DeptVO> dList);
+	
 }

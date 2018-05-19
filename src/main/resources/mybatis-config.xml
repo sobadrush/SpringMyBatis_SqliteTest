@@ -4,4 +4,10 @@
     <settings>  
         <setting name="logImpl" value="LOG4J"/>  
     </settings>  
+
+	<!-- 自訂轉換器 (For Sqlite 的 EmpVO.class → hiredate) -->    
+    <typeHandlers>
+    	<typeHandler handler="_02_typeHandler.CustomTimeStampHandler" javaType="java.sql.Date" jdbcType="VARCHAR"/>
+	</typeHandlers>
+	
 </configuration>  

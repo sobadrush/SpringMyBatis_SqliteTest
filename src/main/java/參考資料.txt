@@ -9,6 +9,8 @@ https://blog.csdn.net/qq_26718271/article/details/65629805
 https://www.developpez.net/forums/d747746/java/general-java/jdbc/jdbc-api-execute-multiple-queries/
 https://www.google.com.tw/search?ei=qMH_WvrfF8T68gXSp4CYBQ&q=mybatisallowMultiQueries&oq=mybatisallowMultiQueries&gs_l=psy-ab.3..0i7i30k1l2.7125.8476.0.8571.7.7.0.0.0.0.97.571.7.7.0....0...1c.1.64.psy-ab..0.7.570...0i13k1j0i8i7i30k1j0i13i30k1.0.s774cV4JrYU
 
+【MyBatis自定义数据映射TypeHandler → 轉換日期時間】
+https://my.oschina.net/amoshuang/blog/134199
 
 【mybatis批量更新或者插入的时候必须在数据库连接上打开allowMultiQueries选项】
 https://blog.csdn.net/fangletian1981/article/details/62893164
@@ -21,6 +23,9 @@ https://www.oschina.net/question/1393304_2203930
 
 【mybatis的mapper返回map结果集】
 https://segmentfault.com/a/1190000004278833
+
+【mybatis Example類別使用】
+https://blog.csdn.net/biandous/article/details/65630783
 
 <!-- ﹝測試Foreach：通常搭配 IN﹞ -->
 <!-- collection="deptNoInArr" vs @Param(value = "deptNoGGG") , -->

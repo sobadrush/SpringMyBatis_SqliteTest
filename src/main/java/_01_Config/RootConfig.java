@@ -100,4 +100,5 @@ public class RootConfig {
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);
 		ctx.close();
 	}
+	
 }

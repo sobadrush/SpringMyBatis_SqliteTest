@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ctbc.mapper.EmpMapper">
+
+  <resultMap id="BaseResultMap" type="fuckEmpVO">
+    <id column="empno" jdbcType="INTEGER" property="empno" />
+    <result column="ename" jdbcType="VARCHAR" property="ename" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="hiredate" jdbcType="DATE" property="hiredate" typeHandler="_02_typeHandler.CustomTimeStampHandler"/><!-- 自訂時間日期轉換器 -->
+    <result column="deptno" jdbcType="INTEGER" property="deptno" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    empno, ename, job, hiredate, deptno
+  </sql>
+  <select id="selectByExample" parameterType="com.ctbc.model.vo.EmpVOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from z40180_empTB
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from z40180_empTB
+    where empno = #{empno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z40180_empTB
+    where empno = #{empno,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ctbc.model.vo.EmpVOExample">
+    delete from z40180_empTB
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="fuckEmpVO">
+<!--     <selectKey keyProperty="empno" order="AFTER" resultType="java.lang.Integer"> -->
+<!--       SQL_Server -->
+<!--     </selectKey> -->
+    insert into z40180_empTB (ename, job, hiredate,deptno)
+    values (#{ename,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{hiredate,jdbcType=DATE}, 
+      #{deptno,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="fuckEmpVO">
+    <selectKey keyProperty="empno" order="AFTER" resultType="java.lang.Integer">
+      SQL_Server
+    </selectKey>
+    insert into z40180_empTB
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ename != null">
+        ename,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="hiredate != null">
+        hiredate,
+      </if>
+      <if test="deptno != null">
+        deptno,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ename != null">
+        #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null">
+        #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="deptno != null">
+        #{deptno,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ctbc.model.vo.EmpVOExample" resultType="java.lang.Long">
+    select count(*) from z40180_empTB
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update z40180_empTB
+    <set>
+      <if test="record.empno != null">
+        empno = #{record.empno,jdbcType=INTEGER},
+      </if>
+      <if test="record.ename != null">
+        ename = #{record.ename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.job != null">
+        job = #{record.job,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hiredate != null">
+        hiredate = #{record.hiredate,jdbcType=DATE},
+      </if>
+      <if test="record.deptno != null">
+        deptno = #{record.deptno,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update z40180_empTB
+    set empno = #{record.empno,jdbcType=INTEGER},
+      ename = #{record.ename,jdbcType=VARCHAR},
+      job = #{record.job,jdbcType=VARCHAR},
+      hiredate = #{record.hiredate,jdbcType=DATE},
+      deptno = #{record.deptno,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="fuckEmpVO">
+    update z40180_empTB
+    <set>
+      <if test="ename != null">
+        ename = #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null">
+        hiredate = #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="deptno != null">
+        deptno = #{deptno,jdbcType=INTEGER},
+      </if>
+    </set>
+    where empno = #{empno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="fuckEmpVO">
+    update z40180_empTB
+    set ename = #{ename,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      hiredate = #{hiredate,jdbcType=DATE},
+      deptno = #{deptno,jdbcType=INTEGER}
+    where empno = #{empno,jdbcType=INTEGER}
+  </update>
+</mapper>

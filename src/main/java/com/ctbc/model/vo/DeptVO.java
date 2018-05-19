@@ -61,7 +61,7 @@ public class DeptVO implements Serializable {
 	public String toString() {
 		boolean outputTransients = false;
 		boolean outputStatics = false;
-		return ReflectionToStringBuilder.toString(this, ToStringStyle.DEFAULT_STYLE , outputTransients, outputStatics);
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.JSON_STYLE , outputTransients, outputStatics);
 	}
 
 }

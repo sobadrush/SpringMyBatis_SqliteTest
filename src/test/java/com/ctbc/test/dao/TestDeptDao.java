@@ -61,6 +61,13 @@ public class TestDeptDao {
 		System.out.println(" ================================================================================ \n");
 	}
 
+	private void getAll() {
+		List<DeptVO> deptVOs = deptMapper.getAll();
+		for (DeptVO deptVO : deptVOs) {
+			System.out.println(deptVO);
+		}
+	}
+
 	@Test
 	@Ignore
 	public void test_001() throws SQLException {
@@ -72,9 +79,9 @@ public class TestDeptDao {
 	public void test_002() throws SQLException {
 		this.getAll();
 	}
-	
+
 	@Test
-//	@Ignore
+	@Ignore
 	public void test_003() throws SQLException {
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		ids.add(20);
@@ -91,7 +98,7 @@ public class TestDeptDao {
 		DeptVO deptVO = deptMapper.getDeptById(10);
 		System.out.println(deptVO);
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_005() throws SQLException {
@@ -102,19 +109,72 @@ public class TestDeptDao {
 	}
 
 	@Test
-	@Rollback(false)
 	@Ignore
+	@Rollback(false)
 	public void test_006() throws SQLException {
 		int pen = deptMapper.addDept(new DeptVO("國防部", "博愛區"));
 		System.out.println("insert success : " + pen);
 		this.getAll();
 	}
-	
-	private void getAll() {
-		List<DeptVO> deptVOs = deptMapper.getAll();
-		for (DeptVO deptVO : deptVOs) {
-			System.out.println(deptVO);
-		}
+
+	@Test
+	@Ignore
+	@Rollback(false)
+	public void test_007() throws SQLException {
+		int pen = deptMapper.updateDeptById(new DeptVO(10, "交通部", "博愛區"));
+		System.out.println("update success : " + pen);
+		this.getAll();
 	}
-	
+
+	@Test
+	@Ignore
+	@Rollback(false)
+	public void test_008() throws SQLException {
+		int pen = deptMapper.delDeptById(20);
+		System.out.println("delete success : " + pen);
+		this.getAll();
+	}
+
+	@Test
+	@Ignore
+	@Rollback(false)
+	public void test_009() throws SQLException {
+		int pen = deptMapper.delDeptByIdArray(new int[] { 20, 30 });
+		System.out.println("delete success : " + pen);
+		this.getAll();
+	}
+
+	@Test
+	@Ignore
+	@Rollback(false)
+	public void test_010() throws SQLException {
+		List<DeptVO> dList = new ArrayList<>();
+		dList.add(new DeptVO("國防部_1", "中正區_1"));
+		dList.add(new DeptVO("國防部_2", "中正區_2"));
+		int pen = deptMapper.addDeptsBatch(dList);
+		System.err.println("insert batch success : " + pen);
+		this.getAll();
+	}
+
+	@Test
+//	@Ignore
+	@Rollback(false)
+	public void test_011() throws SQLException {
+		List<DeptVO> dList = new ArrayList<>();
+		dList.add(new DeptVO(10, "交通部1", "大安區1"));
+		dList.add(new DeptVO(20, "交通部2", "大安區2"));
+		
+		int pen;
+		try {
+			pen = deptMapper.updateDeptsBatch(dList);
+			System.err.println("update batch success : " + pen);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		this.getAll();
+	}
+
 }

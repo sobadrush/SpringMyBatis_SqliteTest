@@ -1,0 +1,19 @@
+
+【Mybatis的<where><foreach><set>等标签详解】
+https://blog.csdn.net/zenson_g/article/details/10137665
+
+【批量update，需要在jdbc的url加上allowMultiQueries=true这句话，使同时支持支持多条sql】
+http://www.voidcn.com/article/p-kwxhejog-qv.html
+https://blog.csdn.net/ziyao_zou/article/details/77891420
+https://blog.csdn.net/qq_26718271/article/details/65629805
+https://www.developpez.net/forums/d747746/java/general-java/jdbc/jdbc-api-execute-multiple-queries/
+
+<!-- ﹝測試Foreach：通常搭配 IN﹞ -->
+<!-- collection="deptNoInArr" vs @Param(value = "deptNoGGG") , -->
+<!-- 若沒寫 @Param ，則參數型態為 ：                           -->
+<!-- 陣列 → collection="array" -->
+<!-- List → collection="list" -->
+<!-- Map  → collection="map的key" -->
+<!-- 在list和陣列中,index是元素的序号，在map中，index是元素的key -->
+<!-- 【參考】 : https://my.oschina.net/linuxred/blog/38802 -->
+<!-- 【參考】 : http://blog.csdn.net/isea533/article/details/21237175 -->

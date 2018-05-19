@@ -1,5 +1,7 @@
 package _01_Config;
 
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -31,41 +33,54 @@ public class RootConfig {
 
 	@Value("classpath:/_00_建立資料表/Insert_SqliteDB_Script.sql")
 	private Resource dataScript;
-	
+
 	@Bean(name = "driverManagerDS")
 	public DataSource driverManagerDatasource() {
-		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setUrl("jdbc:sqlite:" + System.getProperty("user.dir") + "/" + "testDB.db");
+		Properties props = new Properties();
+		props.setProperty("allowMultiQueries", "true");
+		String connectionString = "jdbc:sqlite:" + System.getProperty("user.dir") + "/" + "testDB.db";
+		DriverManagerDataSource ds = new DriverManagerDataSource(connectionString, props);
+		ds.setUrl(connectionString); // allowMultiQueries=true
 		ds.setDriverClassName("org.sqlite.JDBC");
 		return ds;
 	}
+
+//	@Bean(name = "driverManagerDS")
+//	public DataSource driverManagerDatasource() {
+//		DriverManagerDataSource ds = new DriverManagerDataSource();
+//		ds.setUrl("jdbc:sqlserver://localhost:1433;databaseName=DB_Emp_Dept");
+//		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//		ds.setUsername("sa");
+//		ds.setPassword("sa123456");
+//		return ds;
+//	}
 
 	@Bean
 	public PlatformTransactionManager txManager(DataSource ds) {
 		return new DataSourceTransactionManager(ds);
 	}
-	
+
 	/*****************************************
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
 	@Bean
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
-	    final DataSourceInitializer initializer = new DataSourceInitializer();
-	    initializer.setDataSource(dataSource);
-	    initializer.setDatabasePopulator(this.databasePopulator());
-	    return initializer;
+		final DataSourceInitializer initializer = new DataSourceInitializer();
+		initializer.setDataSource(dataSource);
+		initializer.setDatabasePopulator(this.databasePopulator());
+		return initializer;
 	}
 
 	/*****************************************
 	 ********** DataBase 資料填充器 **********
 	 *****************************************/
-	private DatabasePopulator databasePopulator() { 
-	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-	    populator.addScript(this.schemaScript);
-	    populator.addScript(this.dataScript);
-	    return populator;
+	private DatabasePopulator databasePopulator() {
+		final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+		populator.addScript(this.schemaScript);
+		populator.addScript(this.dataScript);
+		return populator;
 	}
-	
+
 	@Bean
 	public SqlSessionFactory sqlSessionFactoryBean(@Qualifier("driverManagerDS") DataSource ds, ApplicationContext applicationContext) throws Exception {
 		System.out.println("啟用連線池：" + ds);
@@ -77,8 +92,7 @@ public class RootConfig {
 		sqlSessionFactory.setTypeAliasesPackage("com.ctbc.model.vo");
 		return sqlSessionFactory.getObject();
 	}
-	
-	
+
 	public static void main(String[] args) {
 		// 測試自動建表
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);

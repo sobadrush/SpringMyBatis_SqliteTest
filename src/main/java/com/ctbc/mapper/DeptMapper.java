@@ -33,4 +33,15 @@ public interface DeptMapper {
 	public abstract DeptVO getDeptByIdMap(@Param("deptMap") Map<String, String> deptMap);
 	
 	public abstract int addDept(@Param("deptVOGGG") DeptVO deptVO);
+	
+	public abstract int updateDeptById(@Param("deptVO") DeptVO deptVO);
+	
+	public abstract int delDeptById(int deptId);
+	
+	public abstract int delDeptByIdArray(@Param("deptIdsArr") int[] deptIds);
+	
+	public abstract int addDeptsBatch(@Param("deptList") List<DeptVO> dList);
+	
+	public abstract int updateDeptsBatch(@Param("deptList") List<DeptVO> dList);
+	
 }

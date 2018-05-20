@@ -195,7 +195,7 @@ public class TestDeptDao {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_013() throws SQLException {
 		List<DeptVO> dList = new ArrayList<>();
@@ -246,6 +246,18 @@ public class TestDeptDao {
 	public void test_018() throws SQLException {
 		Map<String, String> deptMap = deptMapper.getDeptByIdForMapUseAnnotation(40);
 		System.err.println(" >>> " + deptMap.toString());
+	}
+	
+	@Test // 測試insert並獲得最新的主鍵
+//	@Ignore
+	@Rollback(false)
+	public void test_019() throws SQLException {
+		DeptVO deptVO = new DeptVO("@@國防部", "@@博愛區");
+		System.err.println("插入前主键 >>> " + deptVO);
+		int pen = deptMapper.addDeptReturnLatestKey(deptVO);
+		System.err.println("插入後主鍵 >>> " + deptVO);
+		System.err.println("INSERT SUCCESS : " + pen + " 筆");
+		this.getAll();
 	}
 }
 

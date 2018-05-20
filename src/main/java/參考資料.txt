@@ -31,6 +31,15 @@ https://segmentfault.com/a/1190000004278833
 【mybatis Example類別使用】
 https://blog.csdn.net/biandous/article/details/65630783
 
+【insert並取得最新主鍵】
+https://www.cnblogs.com/fsjohnhuang/p/4078659.html
+http://chenzhou123520.iteye.com/blog/1849881
+https://my.oschina.net/kolbe/blog/512904
+https://stackoverflow.com/questions/18507508/mybatis-how-to-get-the-auto-generated-key-of-an-insert-mysql
+
+【@@IDENTITY (Transact-SQL)】 >>> SELECT @@IDENTITY AS 'Identity'; 
+https://docs.microsoft.com/en-us/sql/t-sql/functions/identity-transact-sql?view=sql-server-2017
+
 <!-- ﹝測試Foreach：通常搭配 IN﹞ -->
 <!-- collection="deptNoInArr" vs @Param(value = "deptNoGGG") , -->
 <!-- 若沒寫 @Param ，則參數型態為 ：                           -->

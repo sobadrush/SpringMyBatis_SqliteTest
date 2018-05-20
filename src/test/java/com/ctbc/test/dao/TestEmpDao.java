@@ -234,7 +234,7 @@ public class TestEmpDao {
 	}
 	
 	@Test // 測試JOIN，根據【員工姓名】查詢【部門資訊】
-//	@Ignore
+	@Ignore
 	@Rollback(true)
 	public void test_015() throws SQLException {
 		EmpVO empVO = new EmpVO();

@@ -11,18 +11,23 @@ import org.apache.ibatis.type.JdbcType;
 
 /**
  * 【教學】https://my.oschina.net/amoshuang/blog/134199
+ * 【教學】https://blog.csdn.net/u012702547/article/details/54572679
  */
 public class CustomTimeStampHandler extends BaseTypeHandler<java.sql.Date> {
 
 	@Override
-	public void setNonNullParameter(PreparedStatement ps, int i, Date parameter, JdbcType jdbcType) throws SQLException {
-		// TODO Auto-generated method stub
+	public void setNonNullParameter(PreparedStatement ps, int i, java.sql.Date parameter, JdbcType jdbcType) throws SQLException {
+		System.err.println("===== TypeHandler setNonNullParameter() =====");
+//		System.err.println("1 Date parameter >>> " + parameter);
+//		System.err.println("2 Date parameter >>> " + parameter.getTime()); /*會變 milisecond*/
+//		System.err.println("3 Date parameter >>> " + parameter.toString());
+		ps.setString(i, String.valueOf(parameter));
 	}
 
 	@Override
 	public Date getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		String sqlDateStr = rs.getString(columnName);
-		System.err.println("@@ sqlDateStr 111 >>> " + sqlDateStr);
+		System.err.println("TypeHandler sqlDateStr 111 >>> " + sqlDateStr);
 		if (sqlDateStr != null) {
 			return java.sql.Date.valueOf(sqlDateStr);
 		}
@@ -32,7 +37,7 @@ public class CustomTimeStampHandler extends BaseTypeHandler<java.sql.Date> {
 	@Override
 	public Date getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
 		String sqlDateStr = rs.getString(columnIndex);
-		System.err.println(" @@ sqlDateStr 222 >>> " + sqlDateStr);
+		System.err.println("TypeHandler sqlDateStr 222 >>> " + sqlDateStr);
 		if (sqlDateStr != null) {
 			return java.sql.Date.valueOf(sqlDateStr);
 		}
@@ -46,3 +51,5 @@ public class CustomTimeStampHandler extends BaseTypeHandler<java.sql.Date> {
 	}
 
 }
+
+

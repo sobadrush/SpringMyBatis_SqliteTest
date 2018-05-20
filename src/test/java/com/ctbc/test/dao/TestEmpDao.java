@@ -67,13 +67,13 @@ public class TestEmpDao {
 		System.out.println("empMapper = " + empMapper);
 	}
 
-	@Test
-//	@Ignore
+	@Test // 查全部
+	@Ignore
 	public void test_002() throws SQLException {
 		this.getAll();
 	}
 
-	@Test
+	@Test // 新增一筆
 	@Ignore
 	@Rollback(false)
 	public void test_003() throws SQLException {
@@ -83,4 +83,22 @@ public class TestEmpDao {
 		this.getAll();
 	}
 
+	@Test // 查一筆
+	@Ignore
+	public void test_004() throws SQLException {
+		EmpVO empVO = empMapper.selectByPrimaryKey(7002);
+		System.err.println(" >>> " + empVO);
+	}
+	
+	@Test // 更新一筆
+//	@Ignore
+	@Rollback(false)
+	public void test_005() throws SQLException {
+		 EmpVO empVO = new EmpVO(7001, "滅霸", "魔王" , java.sql.Date.valueOf("2018-05-20"), 30);
+		 int pen = empMapper.updateByPrimaryKey(empVO);
+		 System.err.println("更新成功 : " + pen + " 筆");
+//		 this.getAll();
+	}
+	
+	
 }

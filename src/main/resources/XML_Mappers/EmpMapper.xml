@@ -101,14 +101,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  
   <insert id="insert" parameterType="fuckEmpVO">
 <!--     <selectKey keyProperty="empno" order="AFTER" resultType="java.lang.Integer"> -->
 <!--       SQL_Server -->
 <!--     </selectKey> -->
     insert into z40180_empTB (ename, job, hiredate,deptno)
-    values (#{ename,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{hiredate,jdbcType=DATE}, 
-      #{deptno,jdbcType=INTEGER})
+    values ( #{ ename    , jdbcType = VARCHAR }, 
+             #{ job      , jdbcType = VARCHAR }, 
+             #{ hiredate , jdbcType = DATE , typeHandler = _02_typeHandler.CustomTimeStampHandler }, 
+             #{ deptno   , jdbcType = INTEGER }
+    )
   </insert>
+  
   <insert id="insertSelective" parameterType="fuckEmpVO">
     <selectKey keyProperty="empno" order="AFTER" resultType="java.lang.Integer">
       SQL_Server
@@ -193,7 +198,7 @@
         job = #{job,jdbcType=VARCHAR},
       </if>
       <if test="hiredate != null">
-        hiredate = #{hiredate,jdbcType=DATE},
+        hiredate = #{ hiredate, jdbcType=DATE },
       </if>
       <if test="deptno != null">
         deptno = #{deptno,jdbcType=INTEGER},
@@ -201,12 +206,15 @@
     </set>
     where empno = #{empno,jdbcType=INTEGER}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="fuckEmpVO">
     update z40180_empTB
-    set ename = #{ename,jdbcType=VARCHAR},
-      job = #{job,jdbcType=VARCHAR},
-      hiredate = #{hiredate,jdbcType=DATE},
-      deptno = #{deptno,jdbcType=INTEGER}
-    where empno = #{empno,jdbcType=INTEGER}
+    set ename    = #{ ename, jdbcType=VARCHAR },
+        job      = #{ job, jdbcType=VARCHAR },
+        hiredate = #{ hiredate, jdbcType=DATE , typeHandler = _02_typeHandler.CustomTimeStampHandler},
+        deptno   = #{ deptno, jdbcType=INTEGER }
+    where 
+    	empno = #{ empno, jdbcType=INTEGER }
   </update>
+  
 </mapper>

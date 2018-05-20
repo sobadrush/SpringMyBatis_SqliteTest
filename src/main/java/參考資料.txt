@@ -12,6 +12,9 @@ https://www.google.com.tw/search?ei=qMH_WvrfF8T68gXSp4CYBQ&q=mybatisallowMultiQu
 【MyBatis自定义数据映射TypeHandler → 轉換日期時間】
 https://my.oschina.net/amoshuang/blog/134199
 
+【关于mybatis中typeHandler的两个案例( insert , update前使用方式 )】
+https://blog.csdn.net/u012702547/article/details/54572679
+
 【mybatis批量更新或者插入的时候必须在数据库连接上打开allowMultiQueries选项】
 https://blog.csdn.net/fangletian1981/article/details/62893164
 

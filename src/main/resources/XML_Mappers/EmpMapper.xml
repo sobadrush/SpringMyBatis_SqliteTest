@@ -177,17 +177,58 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  
   <update id="updateByExample" parameterType="map">
     update z40180_empTB
-    set empno = #{record.empno,jdbcType=INTEGER},
-      ename = #{record.ename,jdbcType=VARCHAR},
-      job = #{record.job,jdbcType=VARCHAR},
-      hiredate = #{record.hiredate,jdbcType=DATE},
-      deptno = #{record.deptno,jdbcType=INTEGER}
+    set empno    = #{ record.empno    , jdbcType=INTEGER },
+        ename    = #{ record.ename    , jdbcType=VARCHAR },
+        job      = #{ record.job      , jdbcType=VARCHAR },
+        hiredate = #{ record.hiredate , jdbcType=DATE },
+        deptno   = #{ record.deptno   , jdbcType=INTEGER }
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  
+   <!-- 批量更新(CASE...WHEN) ... 使用 <foreach> -->
+  <update id="updateEmpsBatchForSqlite2" parameterType="java.util.List">
+	  UPDATE z40180_empTB 
+	  <trim prefix="SET" suffixOverrides=",">
+		  <trim prefix="ename = CASE" suffix="END , ">
+			  <foreach item="item" collection="empList" index="idx">
+				  <if test="item.ename != null and item.ename != ''">
+				    WHEN empno = #{item.empno} THEN #{item.ename}
+				  </if>
+			  </foreach>
+		  </trim>
+		  <trim prefix="job = CASE" suffix="END , ">
+			  <foreach item="item" collection="empList" index="idx">
+				  <if test="item.job != null and item.job != ''">
+				    WHEN empno = #{item.empno} THEN #{item.job}
+				  </if>
+			  </foreach>
+		  </trim>
+		  <trim prefix="hiredate = CASE" suffix="END , ">
+			  <foreach item="item" collection="empList" index="idx">
+				  <if test="item.hiredate != null"><!-- item.hiredate != '' 不可加，會報型態錯誤 -->
+				    WHEN empno = #{item.empno} THEN #{ item.hiredate , jdbcType=DATE , typeHandler = _02_typeHandler.CustomTimeStampHandler }
+				  </if>
+			  </foreach>
+		  </trim>
+		  <trim prefix="deptno = CASE" suffix="END , ">
+			  <foreach item="item" collection="empList" index="idx">
+				  <if test="item.deptno != null and item.deptno != ''">
+				    WHEN empno = #{item.empno} THEN #{ item.deptno }
+				  </if>
+			  </foreach>
+		  </trim>
+	  </trim>
+	  WHERE empno IN
+	  <foreach item="item" collection="empList" index="idx" open="(" separator="," close=")">
+		  #{ item.empno , jdbcType = INTEGER }
+	  </foreach>
+  </update>
+  
   <update id="updateByPrimaryKeySelective" parameterType="fuckEmpVO">
     update z40180_empTB
     <set>

@@ -29,4 +29,8 @@ public interface EmpMapper {
    public int updateByPrimaryKeySelective(EmpVO record);
 
    public int updateByPrimaryKey(EmpVO record);
+   
+   public int updateEmpsBatchForSqlite2(@Param("empList") List<EmpVO> empList);
+   
 }
+

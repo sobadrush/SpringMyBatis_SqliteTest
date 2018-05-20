@@ -192,7 +192,7 @@ public class TestDeptDao {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	@Rollback(false)
 	public void test_013() throws SQLException {
 		List<DeptVO> dList = new ArrayList<>();
@@ -239,7 +239,7 @@ public class TestDeptDao {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	public void test_018() throws SQLException {
 		Map<String, String> deptMap = deptMapper.getDeptByIdForMapUseAnnotation(40);
 		System.err.println(" >>> " + deptMap.toString());

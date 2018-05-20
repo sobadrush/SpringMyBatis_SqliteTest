@@ -114,13 +114,40 @@
 		</foreach>
 	</update>
 	
-	<!-- 批量更新(CASE...WHEN) ... 使用 <foreach> -->
+	<!-- 批量更新(CASE...WHEN) ... 使用 <foreach> (不能更新多個參數, 改下面的寫法) -->
+<!-- 	<update id="updateDeptsBatchForSqlite2" parameterType="java.util.List"> -->
+<!-- 		UPDATE z40180_deptTB  -->
+<!-- 		SET dname =  -->
+<!-- 		<foreach item="item" collection="deptList" index="idx" separator=" " open="CASE" close="END"> -->
+<!-- 			WHEN deptno = #{ item.deptNo } THEN #{ item.deptName } -->
+<!-- 		</foreach> -->
+<!-- 		WHERE deptno IN -->
+<!-- 		<foreach item="item" collection="deptList" index="idx" open="(" separator="," close=")"> -->
+<!-- 			#{ item.deptNo , jdbcType = INTEGER } -->
+<!-- 		</foreach> -->
+<!-- 	</update> -->
+	
+	<!-- 批量更新(CASE...WHEN) ... 使用 <foreach> (可更新多個參數=) -->
 	<update id="updateDeptsBatchForSqlite2" parameterType="java.util.List">
 		UPDATE z40180_deptTB 
-		SET dname = 
-		<foreach item="item" collection="deptList" index="idx" separator=" " open="CASE" close="END">
-			WHEN deptno = #{ item.deptNo } THEN #{ item.deptName }
-		</foreach>
+        <trim prefix="SET" suffixOverrides=",">
+        	部門名稱
+            <trim prefix="dname = CASE" suffix="END , ">
+                 <foreach item="item" collection="deptList" index="idx">
+                     <if test=" item.deptName != null and item.deptName != '' ">
+                         WHEN deptno = #{ item.deptNo } THEN #{ item.deptName }
+                     </if>
+                 </foreach>
+            </trim>
+            部門Loc
+            <trim prefix="loc = CASE" suffix="END,">
+                 <foreach item="item" collection="deptList" index="idx">
+                     <if test=" item.deptLoc != null and item.deptLoc != '' ">
+                         WHEN deptno = #{ item.deptNo } THEN #{ item.deptLoc }
+                     </if>
+                 </foreach>
+            </trim>
+        </trim>
 		WHERE deptno IN
 		<foreach item="item" collection="deptList" index="idx" open="(" separator="," close=")">
 			#{ item.deptNo , jdbcType = INTEGER }

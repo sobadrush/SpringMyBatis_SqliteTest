@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,8 +33,8 @@ import _01_Config.RootConfig;
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(classes = { RootConfig.class })
 @Transactional
-@ActiveProfiles(value = {"sqlite_env"})
-//@ActiveProfiles(value = {"mssql_env"})
+//@ActiveProfiles(value = {"sqlite_env"})
+@ActiveProfiles(value = {"mssql_env"})
 public class TestEmpDao {
 	private static int testNum = 1;
 
@@ -185,7 +186,7 @@ public class TestEmpDao {
 		}
 	}
 
-	@Test // DATE between (Sqlite資料庫 - 失敗, 查到0筆)
+	@Test // DATE between (Sqlite資料庫 - 失敗, 查到0筆; MSSQL 成功！)
 	@Ignore
 	@Rollback(true)
 	public void test_012() throws SQLException, ParseException {
@@ -204,8 +205,8 @@ public class TestEmpDao {
 		}
 	}
 
-	@Test // DATE HiredateEqualTo (Sqlite資料庫 - 失敗, 查到0筆)
-//	@Ignore
+	@Test // DATE HiredateEqualTo (Sqlite資料庫 - 失敗, 查到0筆 ; MSSQL 成功！)
+	@Ignore
 	@Rollback(true)
 	public void test_013() throws SQLException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
@@ -218,6 +219,29 @@ public class TestEmpDao {
 		for (EmpVO empVO : empList) {
 			System.out.println(empVO);
 		}
+	}
+	
+	@Test // 多條件查詢 WHERE ( JOB = 'clerk'  AND ename LIKE '%a%')
+	@Ignore
+	@Rollback(true)
+	public void test_014() throws SQLException, ParseException {
+		EmpVOExample exp = new EmpVOExample();
+		exp.createCriteria().andJobEqualTo("clerk").andEnameLike("%a%");
+		List<EmpVO> empList = empMapper.selectByExample(exp);
+		for (EmpVO empVO : empList) {
+			System.out.println(empVO);
+		}
+	}
+	
+	@Test // 測試JOIN，根據【員工姓名】查詢【部門資訊】
+//	@Ignore
+	@Rollback(true)
+	public void test_015() throws SQLException {
+		EmpVO empVO = new EmpVO();
+		empVO.setEname("king");
+		Map<String, Object> rtnMap = empMapper.getDeptInfoByEmpName(empVO);
+		System.err.println("hiredate 型態 : " + rtnMap.get("hiredate").getClass().getName());// SQLITE: String ; MSSQL: java.sql.Date
+		System.err.println(" >>>>> " + rtnMap);
 	}
 
 }

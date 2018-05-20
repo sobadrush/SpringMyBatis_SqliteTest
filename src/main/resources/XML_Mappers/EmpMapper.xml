@@ -260,4 +260,16 @@
     	empno = #{ empno, jdbcType=INTEGER }
   </update>
   
+  <select id="getDeptInfoByEmpName" resultType="java.util.Map">
+	SELECT * FROM z40180_empTB as ee 
+	JOIN z40180_deptTB AS dd ON
+	ee.deptno = dd.deptno
+	<if test="empVOgg != null">
+		WHERE ee.ename = #{ empVOgg.ename }
+	</if>
+  </select>
+  
 </mapper>
+
+
+

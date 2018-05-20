@@ -1,6 +1,7 @@
 package com.ctbc.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -31,6 +32,8 @@ public interface EmpMapper {
    public int updateByPrimaryKey(EmpVO record);
    
    public int updateEmpsBatchForSqlite2(@Param("empList") List<EmpVO> empList);
+   
+   public Map<String, Object> getDeptInfoByEmpName(@Param("empVOgg") EmpVO record);
    
 }
 

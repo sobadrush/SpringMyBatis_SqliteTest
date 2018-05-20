@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,8 @@ import _01_Config.RootConfig;
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(classes = { RootConfig.class })
 @Transactional
+@ActiveProfiles(value = {"sqlite_env"})
+//@ActiveProfiles(value = {"mssql_env"})
 public class TestDeptDao {
 
 	private static int testNum = 1;

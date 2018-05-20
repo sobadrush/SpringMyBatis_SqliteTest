@@ -19,7 +19,7 @@ public class EmpVO implements Serializable {
     private Integer empno;
     private String ename;
     private String job;
-    private Date hiredate;
+    private java.sql.Date hiredate;
     private Integer deptno;
 
     public EmpVO() {

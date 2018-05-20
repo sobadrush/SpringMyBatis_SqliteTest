@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -34,7 +35,8 @@ public class RootConfig {
 	private Resource dataScript;
 
 	@Bean(name = "driverManagerDS")
-	public DataSource driverManagerDatasource() {
+	@Profile("sqlite_env")
+	public DataSource driverManagerDatasourceSqlite() {
 		String connectionString = "jdbc:sqlite:" + System.getProperty("user.dir") + "/" + "testDB.db";
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl(connectionString);
@@ -46,15 +48,16 @@ public class RootConfig {
 		return ds;
 	}
 
-//	@Bean(name = "driverManagerDS")
-//	public DataSource driverManagerDatasource() {
-//		DriverManagerDataSource ds = new DriverManagerDataSource();
-//		ds.setUrl("jdbc:sqlserver://localhost:1433;databaseName=DB_Emp_Dept");
-//		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//		ds.setUsername("sa");
-//		ds.setPassword("sa123456");
-//		return ds;
-//	}
+	@Bean(name = "driverManagerDS")
+	@Profile("mssql_env")
+	public DataSource driverManagerDatasourceMS() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setUrl("jdbc:sqlserver://localhost:1433;databaseName=DB_Emp_Dept");
+		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		ds.setUsername("sa");
+		ds.setPassword("sa123456");
+		return ds;
+	}
 
 	@Bean
 	public PlatformTransactionManager txManager(DataSource ds) {
@@ -64,7 +67,8 @@ public class RootConfig {
 	/*****************************************
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
-	@Bean
+	@Bean // For Sqlite的腳本
+	@Profile("sqlite_env")
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		final DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);

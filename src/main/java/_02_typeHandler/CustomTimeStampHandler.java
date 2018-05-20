@@ -47,6 +47,7 @@ public class CustomTimeStampHandler extends BaseTypeHandler<java.sql.Date> {
 	@Override
 	public Date getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
 		// TODO Auto-generated method stub
+		System.err.println("TypeHandler sqlDateStr 333 >>> ");
 		return null;
 	}
 

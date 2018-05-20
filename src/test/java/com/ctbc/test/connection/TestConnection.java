@@ -54,13 +54,13 @@ public class TestConnection {
 //	@Ignore
 	public void test_001() throws SQLException {
 		String productName = ds.getConnection().getMetaData().getDatabaseProductName();
-		System.out.println(" 資料庫廠商 >>> " + productName);
+		System.err.println(" 資料庫廠商 >>> " + productName);
 	}
 	
 	@Test
 //	@Ignore
 	public void test_002() throws SQLException {
-		System.out.println(" sqlSessionFactory >>> " + sqlSessionFactory);
+		System.err.println(" sqlSessionFactory >>> " + sqlSessionFactory);
 	}
 
 }

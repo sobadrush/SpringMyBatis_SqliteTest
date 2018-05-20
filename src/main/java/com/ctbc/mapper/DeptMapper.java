@@ -40,6 +40,8 @@ public interface DeptMapper {
 	
 	public abstract int addDept(@Param("deptVOGGG") DeptVO deptVO);
 	
+	public abstract int addDeptReturnLatestKey(@Param("deptVOGGG") DeptVO deptVO);
+	
 	public abstract int updateDeptById(@Param("deptVO") DeptVO deptVO);
 	
 	public abstract int delDeptById(int deptId);

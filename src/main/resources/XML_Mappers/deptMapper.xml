@@ -47,7 +47,13 @@
 	</select>
 
 	<insert id="addDept" parameterType="fuckDeptVO">
-		INSERT INTO z40180_deptTB ( 'dname' , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
+		INSERT INTO z40180_deptTB ( "dname" , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
+	</insert>
+	
+	<!-- insert後獲得最新主鍵 >>> 成功！ -->
+	<insert id="addDeptReturnLatestKey" parameterType="fuckDeptVO" 
+			useGeneratedKeys="true" keyProperty="deptVOGGG.deptNo" keyColumn="deptno">
+		INSERT INTO z40180_deptTB ( "dname" , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
 	</insert>
 	
 	<update id="updateDeptById">
@@ -131,7 +137,7 @@
 	<update id="updateDeptsBatchForSqlite2" parameterType="java.util.List">
 		UPDATE z40180_deptTB 
         <trim prefix="SET" suffixOverrides=",">
-        	部門名稱
+        	<!-- 部門名稱 -->
             <trim prefix="dname = CASE" suffix="END , ">
                  <foreach item="item" collection="deptList" index="idx">
                      <if test=" item.deptName != null and item.deptName != '' ">
@@ -139,7 +145,7 @@
                      </if>
                  </foreach>
             </trim>
-            部門Loc
+            <!-- 部門Loc -->
             <trim prefix="loc = CASE" suffix="END,">
                  <foreach item="item" collection="deptList" index="idx">
                      <if test=" item.deptLoc != null and item.deptLoc != '' ">

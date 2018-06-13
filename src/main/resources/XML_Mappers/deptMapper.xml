@@ -78,6 +78,7 @@
 		</foreach>
 	</delete>
 	
+	<!-- 批量新增 -->
 	<insert id="addDeptsBatch" parameterType="java.util.List">
 		INSERT INTO z40180_deptTB ( 'dname' , "loc" ) 
 		VALUES 

@@ -50,4 +50,7 @@ https://docs.microsoft.com/en-us/sql/t-sql/functions/identity-transact-sql?view=
 <!-- 【參考】 : https://my.oschina.net/linuxred/blog/38802 -->
 <!-- 【參考】 : http://blog.csdn.net/isea533/article/details/21237175 -->
 
+【真‧Batch INSERT】
+https://blog.csdn.net/e_wsq/article/details/54344540
+https://blog.csdn.net/wlwlwlwl015/article/details/50246717
 

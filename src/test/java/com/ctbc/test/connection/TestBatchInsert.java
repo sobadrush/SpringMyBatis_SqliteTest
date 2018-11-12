@@ -87,6 +87,12 @@ public class TestBatchInsert {
 //	@Ignore
 	@Rollback(false)
 	public void test_003() throws SQLException {
+		
+		/**
+		 * 【真‧Batch INSERT】
+		 *  https://blog.csdn.net/e_wsq/article/details/54344540
+		 */
+		
 		SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
 		
 		DeptVO deptVO_01 = new DeptVO("A部","中正區A");

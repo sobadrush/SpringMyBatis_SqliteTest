@@ -117,7 +117,7 @@ public class TestBatchInsert {
 			for (int i = 0 ; i < deptList.size() ; i++) {
 				DeptVO voToInsert = deptList.get(i);
 				deptMapper.addDept(voToInsert);
-				if (i % 2 == 0 || i == size - 1) {
+				if ( (i % 2 == 0 || i == size - 1) && i >= 2 ) {
 					// 手动每1000个一提交，提交后无法回滚
 					session.commit();
 					session.clearCache();// 清理缓存，防止溢出

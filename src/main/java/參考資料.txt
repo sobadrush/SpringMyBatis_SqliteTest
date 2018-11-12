@@ -53,4 +53,8 @@ https://docs.microsoft.com/en-us/sql/t-sql/functions/identity-transact-sql?view=
 【真‧Batch INSERT】
 https://blog.csdn.net/e_wsq/article/details/54344540
 https://blog.csdn.net/wlwlwlwl015/article/details/50246717
+https://blog.csdn.net/e_wsq/article/details/54344540
+https://blog.csdn.net/qq_31457665/article/details/81130234
+https://blog.csdn.net/yangliuhbhd/article/details/80982254
+
 

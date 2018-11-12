@@ -35,6 +35,7 @@ import _01_Config.RootConfig;
 @ContextConfiguration(classes = { RootConfig.class })
 @Transactional
 @ActiveProfiles(profiles = { "sqlite_env" })
+//@ActiveProfiles(profiles = { "mssql_env" })
 public class TestBatchInsert {
 
 	private static int testNum = 1;
@@ -45,8 +46,8 @@ public class TestBatchInsert {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
 
-	@Autowired
-	private DeptMapper deptMapper;
+//	@Autowired
+//	private DeptMapper deptMapper;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -83,17 +84,19 @@ public class TestBatchInsert {
 		System.err.println(" sqlSessionFactory >>> " + sqlSessionFactory);
 	}
 	
+	/**
+	 * 【真‧Batch INSERT】
+	 *  https://blog.csdn.net/e_wsq/article/details/54344540
+	 *  https://blog.csdn.net/qq_31457665/article/details/81130234
+	 *  https://blog.csdn.net/yangliuhbhd/article/details/80982254
+	 */
 	@Test
 //	@Ignore
 	@Rollback(false)
-	public void test_003() throws SQLException {
+	public void test_004() throws SQLException {
 		
-		/**
-		 * 【真‧Batch INSERT】
-		 *  https://blog.csdn.net/e_wsq/article/details/54344540
-		 */
-		
-		SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+		SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH, false/*auto-commit*/);// 跟工廠要一個使用BATCH操作的session
+		DeptMapper deptMapperBatch = session.getMapper(DeptMapper.class);// 由此session中取得mapper
 		
 		DeptVO deptVO_01 = new DeptVO("A部","中正區A");
 		DeptVO deptVO_02 = new DeptVO("B部","中正區B");
@@ -104,22 +107,18 @@ public class TestBatchInsert {
 		DeptVO deptVO_07 = new DeptVO("G部","中正區G");
 		
 		List<DeptVO> deptList = new ArrayList<>();
-		deptList.add(deptVO_01);
-		deptList.add(deptVO_02);
-		deptList.add(deptVO_03);
-		deptList.add(deptVO_04);
-		deptList.add(deptVO_05);
-		deptList.add(deptVO_06);
+		deptList.add(deptVO_01); deptList.add(deptVO_02); deptList.add(deptVO_03);
+		deptList.add(deptVO_04); deptList.add(deptVO_05); deptList.add(deptVO_06);
 		deptList.add(deptVO_07);
 		
 		int size = deptList.size();
+		int commitPeriod = 2;
 		try {
-			for (int i = 0 ; i < deptList.size() ; i++) {
-				DeptVO voToInsert = deptList.get(i);
-				deptMapper.addDept(voToInsert);
-				if ( (i % 2 == 0 || i == size - 1) && i >= 2 ) {
-					// 手动每1000个一提交，提交后无法回滚
-					session.commit();
+			for (int i = 1 ; i <= size ; i++) {
+				DeptVO voToInsert = deptList.get(i-1);
+				deptMapperBatch.addDept(voToInsert);
+				if ( (i % commitPeriod == 0 || i == size) && i >= commitPeriod ) { // 每commitPeriod就commit給DB一次
+					session.commit(); 
 					session.clearCache();// 清理缓存，防止溢出
 				}
 			}

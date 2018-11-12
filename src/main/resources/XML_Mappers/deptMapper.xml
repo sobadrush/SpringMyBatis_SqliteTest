@@ -9,8 +9,8 @@
 <mapper namespace="com.ctbc.mapper.DeptMapper">  <!-- "必須"對應 mapper interface 所在的包 -->
 	
 	
-<!-- <resultMap id="resultMapDept" type="com.ctbc.model.vo.DeptVO"> -->
-	<resultMap id="resultMapDept" type="fuckDeptVO">
+	<resultMap id="resultMapDept" type="com.ctbc.model.vo.DeptVO">
+	<!-- <resultMap id="resultMapDept" type="fuckDeptVO"> -->
 		<id property="deptNo" column="deptno"/>
 		<result property="deptName" column="dname"/>
 		<result property="deptLoc" column="loc"/>
@@ -46,12 +46,14 @@
 		</where>
 	</select>
 
-	<insert id="addDept" parameterType="fuckDeptVO">
+	<!-- <insert id="addDept" parameterType="fuckDeptVO"> -->
+	<insert id="addDept" parameterType="com.ctbc.model.vo.DeptVO">
 		INSERT INTO z40180_deptTB ( "dname" , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
 	</insert>
 	
 	<!-- insert後獲得最新主鍵 >>> 成功！ -->
-	<insert id="addDeptReturnLatestKey" parameterType="fuckDeptVO" 
+	<!-- <insert id="addDeptReturnLatestKey" parameterType="fuckDeptVO" --> 
+	<insert id="addDeptReturnLatestKey" parameterType="com.ctbc.model.vo.DeptVO" 
 			useGeneratedKeys="true" keyProperty="deptVOGGG.deptNo" keyColumn="deptno">
 		INSERT INTO z40180_deptTB ( "dname" , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
 	</insert>

@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ctbc.mapper.DeptMapper;
+import com.ctbc.mapper.EmpMapper;
 import com.ctbc.model.vo.DeptVO;
+import com.ctbc.model.vo.EmpVO;
+import com.ctbc.mybatis.util.MybatisExecutorContext;
 
 import _01_Config.RootConfig;
 
@@ -33,6 +36,9 @@ public class MyTransactionService {
 	@Autowired
 	private DeptMapper deptMapper;
 
+	@Autowired
+	private EmpMapper empMapper;
+	
 //	@Transactional(propagation = Propagation.REQUIRED , isolation = Isolation.DEFAULT , transactionManager = "txManager")
 //	public void testTransaction() {
 //		deptMapper.addDept(new DeptVO("國防部A", "新北永和A"));
@@ -54,7 +60,7 @@ public class MyTransactionService {
 
 		// 準備假資料
 		List<DeptVO> dList = new ArrayList<>();
-		for (int i = 1 ; i <= 3001 ; i++) {
+		for (int i = 1 ; i <= 3002 ; i++) {
 			DeptVO deptVO = new DeptVO(String.format("部門%04d", i), String.format("地區%04d", i));
 			dList.add(deptVO);
 		}
@@ -62,8 +68,9 @@ public class MyTransactionService {
 //		svcBean.saveBatchServiceTypeA(dList); // java.sql.BatchUpdateException: 內送要求的參數太多。伺服器最多支援 2100 個參數。請減少參數數目後再重新傳送要求。
 //		svcBean.saveBatchServiceTypeB(dList, 1000);
 //		svcBean.saveBatchServiceTypeC(dList, 1000);
-		svcBean.saveBatchServiceTypeD(dList, 1000);
+//		svcBean.saveBatchServiceTypeD(dList, 1000);
 //		svcBean.saveBatchServiceTypeE(dList, 1000);
+		svcBean.saveBatchServiceTypeF(dList, 1000);
 
 		context.close();
 	}
@@ -191,7 +198,7 @@ public class MyTransactionService {
 				//--------------------------------------------------
 				index = batchLastIndex + 1;// 設置下一輪INSERT的下界
 				batchLastIndex = index + (batchCount - 1);// 設置下一輪INSERT的上界
-				
+
 				//--------------------------------------------------
 				if (index == 2000) {
 //					throw new RuntimeException("我中斷囉~測試RollBack");
@@ -200,6 +207,38 @@ public class MyTransactionService {
 		}
 
 		return true;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, transactionManager = "txManager")
+	public boolean saveBatchServiceTypeF(List<DeptVO> deptList, int perNum) {
+		
+		MybatisExecutorContext.openBatchExecutorMode(); // 開啟BATCH MODE ( insert / update / delete 成功返回的列數會是 負數 )
+//		MybatisExecutorContext.openSimpleExecutorMode();// 開啟SIMPLE MODE ( insert / update / delete 返回的列數 )
+		
+		System.err.println(" MybatisExecutorContext.isOpenExecutorMode() >>> " + MybatisExecutorContext.isOpenExecutorMode());
+		for (int i = 1 ; i <= deptList.size() ; i++) {
+
+			if (i == 1021) {
+//				throw new RuntimeException("測試rollback~~");
+			}
+
+			int pen = deptMapper.addDept(deptList.get(i - 1));
+			System.err.println("pen = " + pen);
+			if ((i % 1000 == 0) && (i >= 1000)) {
+				MybatisExecutorContext.doFlushStatements();
+			} else if (i == deptList.size()) {
+				MybatisExecutorContext.doFlushStatements();
+			}
+
+		}
+		
+		//---------------
+		MybatisExecutorContext.openSimpleExecutorMode();// 開啟SIMPLE MODE ( 讓返回的筆數正常 )
+		EmpVO empVO = new EmpVO("蝙蝠俠", "DC英雄", java.sql.Date.valueOf("2018-05-20"), 20);
+		int pen = empMapper.insert(empVO);
+		System.err.println("新增emp成功 : " + pen + " 筆");
+		
+		return false;
 	}
 
 }

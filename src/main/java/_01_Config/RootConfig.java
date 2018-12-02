@@ -26,6 +26,8 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.ctbc.mybatis.util.SpringContextUtil;
+
 @Configuration
 @EnableTransactionManagement
 @MapperScan(basePackages = { "com.ctbc.mapper" })
@@ -47,6 +49,11 @@ public class RootConfig {
 	@Value("classpath:/_00_建立資料表/Insert_MSSQL_Script.sql")
 	private Resource dataScript_MSSQL;
 
+	@Bean
+	public SpringContextUtil springContextUtil() {
+		return new SpringContextUtil();
+	}
+	
 	@Bean(name = "driverManagerDS")
 	@Profile("sqlite_env")
 	public DataSource driverManagerDatasourceSqlite() {
@@ -128,8 +135,10 @@ public class RootConfig {
 
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-//		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.SIMPLE);
-		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH); // insert/update/delete 無法在交易commit前返回異動的資料列數
+		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.SIMPLE);
+
+		// insert/update/delete 無法在交易commit前返回異動的資料列數(會返回類似-2147482646的負數)
+//		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH); 
 		return sqlSessTemplate;
 	}
 	
@@ -140,6 +149,7 @@ public class RootConfig {
 		
 		// 測試自動建表 & 填充資料
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);
+		
 		ctx.close();
 	}
 	

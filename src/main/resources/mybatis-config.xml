@@ -3,6 +3,7 @@
 <configuration>  
     <settings>  
         <setting name="logImpl" value="LOG4J"/>  
+        <!-- <setting name="defaultExecutorType" value="BATCH"/> -->
     </settings>  
 
 	<!-- 自訂轉換器 (For Sqlite 的 EmpVO.class → hiredate) -->    

@@ -53,8 +53,18 @@ https://docs.microsoft.com/en-us/sql/t-sql/functions/identity-transact-sql?view=
 【真‧Batch INSERT】
 https://blog.csdn.net/e_wsq/article/details/54344540
 https://blog.csdn.net/wlwlwlwl015/article/details/50246717
-https://blog.csdn.net/e_wsq/article/details/54344540
 https://blog.csdn.net/qq_31457665/article/details/81130234
 https://blog.csdn.net/yangliuhbhd/article/details/80982254
+http://www.blogjava.net/diggbag/articles/mybatis.html
+https://blog.csdn.net/qq_24607837/article/details/81381934
+
+【MyBatis批量操作报错：Parameter 'xxxList' not found. Available parameters are [list]】
+http://chenzhou123520.iteye.com/blog/1921284
+
+【MyBatis插入数据返回值为负数】
+https://my.oschina.net/MrBamboo/blog/882745
+
+※※※【扩展mybatis重写mybatis执行器实现灵活批处理】※※※
+http://xiangshouxiyang.iteye.com/blog/2391203
 
 

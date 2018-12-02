@@ -2,8 +2,10 @@ package _01_Config;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
@@ -26,13 +29,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @MapperScan(basePackages = { "com.ctbc.mapper" })
+@ComponentScan(basePackages = { "com.ctbc.service"  })
 public class RootConfig {
 
+	@Value("${spring.profiles.active}")
+	private String springActiveProfile;
+	
 	@Value("classpath:/_00_建立資料表/Create_SqliteDB_Script.sql")
-	private Resource schemaScript;
+	private Resource schemaScript_SQLITE;
 
 	@Value("classpath:/_00_建立資料表/Insert_SqliteDB_Script.sql")
-	private Resource dataScript;
+	private Resource dataScript_SQLITE;
+	
+	@Value("classpath:/_00_建立資料表/Create_MSSQL_Script.sql")
+	private Resource schemaScript_MSSQL;
+	
+	@Value("classpath:/_00_建立資料表/Insert_MSSQL_Script.sql")
+	private Resource dataScript_MSSQL;
 
 	@Bean(name = "driverManagerDS")
 	@Profile("sqlite_env")
@@ -68,7 +81,7 @@ public class RootConfig {
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
 	@Bean // For Sqlite的腳本
-	@Profile("sqlite_env")
+	@Profile(value = { "sqlite_env" , "mssql_env" })
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		final DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);
@@ -80,9 +93,23 @@ public class RootConfig {
 	 ********** DataBase 資料填充器 **********
 	 *****************************************/
 	private DatabasePopulator databasePopulator() {
+		System.out.println(springActiveProfile);
+		
 		final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.addScript(this.schemaScript);
-		populator.addScript(this.dataScript);
+		
+		switch (springActiveProfile) {
+			case "mssql_env":
+				populator.addScript(this.schemaScript_MSSQL);
+				populator.addScript(this.dataScript_MSSQL);
+				break;
+			case "sqlite_env":
+				populator.addScript(this.schemaScript_SQLITE);
+				populator.addScript(this.dataScript_SQLITE);
+				break;
+			default:
+				break;
+		}
+		
 		return populator;
 	}
 
@@ -99,11 +126,19 @@ public class RootConfig {
 		return sqlSessionFactory.getObject();
 	}
 
+	@Bean
+	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+//		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.SIMPLE);
+		SqlSessionTemplate sqlSessTemplate = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH); // insert/update/delete 無法在交易commit前返回異動的資料列數
+		return sqlSessTemplate;
+	}
+	
 	public static void main(String[] args) {
 		
-		System.setProperty("spring.profiles.active", "sqlite_env");
+//		System.setProperty("spring.profiles.active", "sqlite_env");
+		System.setProperty("spring.profiles.active", "mssql_env");
 		
-		// 測試自動建表
+		// 測試自動建表 & 填充資料
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);
 		ctx.close();
 	}

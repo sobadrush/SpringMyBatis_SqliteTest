@@ -48,7 +48,7 @@
 
 	<!-- <insert id="addDept" parameterType="fuckDeptVO"> -->
 	<insert id="addDept" parameterType="com.ctbc.model.vo.DeptVO">
-		INSERT INTO z40180_deptTB ( "dname" , "loc" ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
+		INSERT INTO z40180_deptTB ( [dname] , [loc] ) VALUES ( #{ deptVOGGG.deptName } , #{ deptVOGGG.deptLoc } );
 	</insert>
 	
 	<!-- insert後獲得最新主鍵 >>> 成功！ -->
@@ -86,6 +86,14 @@
 		VALUES 
 		<foreach item="perDept" collection="deptList" index="idx" separator=",">
 			( #{ perDept.deptName } , #{ perDept.deptLoc } )
+		</foreach>
+	</insert>
+	
+	<!-- 批量新增 V2 -->
+	<insert id="addDeptsBatchV2" parameterType="java.util.List">
+		<foreach item="perDept" collection="list" index="idx" separator="">
+			INSERT INTO z40180_deptTB ( [dname] , [loc] ) 
+			VALUES ( #{ perDept.deptName } , #{ perDept.deptLoc } );
 		</foreach>
 	</insert>
 	

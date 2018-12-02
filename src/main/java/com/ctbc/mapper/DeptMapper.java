@@ -50,6 +50,8 @@ public interface DeptMapper {
 	
 	public abstract int addDeptsBatch(@Param("deptList") List<DeptVO> dList);
 	
+	public abstract int addDeptsBatchV2(@Param("list") List<DeptVO> dList);
+	
 	public abstract int updateDeptsBatch(@Param("deptList") List<DeptVO> dList);
 	
 	/**

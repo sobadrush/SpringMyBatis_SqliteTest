@@ -14,7 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +35,12 @@ import _01_Config.RootConfig;
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(classes = { RootConfig.class })
 @Transactional
-@ActiveProfiles(value = {"sqlite_env"})
-//@ActiveProfiles(value = {"mssql_env"})
+//@ActiveProfiles(value = {"sqlite_env"})
+@ActiveProfiles(value = {"mssql_env"})
 public class TestDeptDao {
 
-	private static int testNum = 1;
+	@Rule
+	public org.junit.rules.TestName testCaseName = new TestName();
 
 	@Autowired
 	private DataSource ds;
@@ -55,10 +58,10 @@ public class TestDeptDao {
 
 	@Before
 	public void setUp() throws Exception {
-		String testNumStr = String.format("%03d", testNum++);
-		System.out.println(" =================================== " + "test_" + testNumStr + " =================================== ");
+		System.out.println(" ========================================================= ");
+		System.out.println(String.format(" ======================== %s ======================= ", testCaseName.getMethodName()));
+		System.out.println(" ========================================================= ");
 	}
-
 	@After
 	public void tearDown() throws Exception {
 		System.out.println(" ================================================================================ \n");
@@ -112,7 +115,7 @@ public class TestDeptDao {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	@Rollback(false)
 	public void test_006() throws SQLException {
 		int pen = deptMapper.addDept(new DeptVO("國防部", "博愛區"));
@@ -249,7 +252,7 @@ public class TestDeptDao {
 	}
 	
 	@Test // 測試insert並獲得最新的主鍵
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_019() throws SQLException {
 		DeptVO deptVO = new DeptVO("@@國防部", "@@博愛區");

@@ -78,6 +78,17 @@ public class RootConfig {
 		ds.setPassword("sa123456");
 		return ds;
 	}
+	
+	@Bean(name = "driverManagerDS")
+	@Profile("mssql_ctbc_env")
+	public DataSource driverManagerDatasourceMS_CTBC() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setUrl("jdbc:sqlserver://172.24.17.52:1803;databaseName=ITOA_MAIN");
+		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		ds.setUsername("ITOA_MAIN_mod");
+		ds.setPassword("f3ru9cj4");
+		return ds;
+	}
 
 	@Bean
 	public PlatformTransactionManager txManager(DataSource ds) {
@@ -88,7 +99,7 @@ public class RootConfig {
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
 	@Bean // For Sqlite的腳本
-	@Profile(value = { "sqlite_env" , "mssql_env" })
+	@Profile(value = { "sqlite_env" , "mssql_env" , "mssql_ctbc_env" })
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		final DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);
@@ -106,6 +117,7 @@ public class RootConfig {
 		
 		switch (springActiveProfile) {
 			case "mssql_env":
+			case "mssql_ctbc_env":
 				populator.addScript(this.schemaScript_MSSQL);
 				populator.addScript(this.dataScript_MSSQL);
 				break;
@@ -145,7 +157,8 @@ public class RootConfig {
 	public static void main(String[] args) {
 		
 //		System.setProperty("spring.profiles.active", "sqlite_env");
-		System.setProperty("spring.profiles.active", "mssql_env");
+//		System.setProperty("spring.profiles.active", "mssql_env");
+		System.setProperty("spring.profiles.active", "mssql_ctbc_env");
 		
 		// 測試自動建表 & 填充資料
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);

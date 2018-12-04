@@ -102,7 +102,7 @@ public class RootConfig {
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
 	@Bean
-	@Profile(value = { "sqlite_env" , "mssql_env" })
+	@Profile(value = { "sqlite_env" , "mssql_env" , "mssql_itoa_env" })
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		final DataSourceInitializer initializer = new DataSourceInitializer();
 		initializer.setDataSource(dataSource);

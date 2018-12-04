@@ -140,7 +140,8 @@ public class ProxyExecutorHandler implements InvocationHandler {
 	public static Configuration getConfiguration() {
 		if (configuration == null) {
 			//从spring上下文中拿到SqlSessionFactory，从而拿到configuration  
-			configuration = SpringContextUtil.getApplicationContext().getBean(SqlSessionFactory.class).getConfiguration();
+//			configuration = SpringContextUtil.getApplicationContext().getBean(SqlSessionFactory.class).getConfiguration();
+			configuration = SpringContextUtil.getBean("sqlSessionFactoryBean", SqlSessionFactory.class).getConfiguration();
 		}
 		return configuration;
 	}

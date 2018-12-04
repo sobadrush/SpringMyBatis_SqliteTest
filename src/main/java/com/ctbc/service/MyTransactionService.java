@@ -54,7 +54,9 @@ public class MyTransactionService {
 //	}
 
 	public static void main(String[] args) {
-		System.setProperty("spring.profiles.active", "mssql_env");
+//		System.setProperty("spring.profiles.active", "mssql_env");
+		System.setProperty("spring.profiles.active", "mssql_itoa_env");
+		
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
 		MyTransactionService svcBean = context.getBean("myTransactionService", MyTransactionService.class);
 

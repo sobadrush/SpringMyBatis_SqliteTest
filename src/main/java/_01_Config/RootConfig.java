@@ -1,5 +1,7 @@
 package _01_Config;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -7,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -78,6 +81,17 @@ public class RootConfig {
 		ds.setPassword("sa123456");
 		return ds;
 	}
+	
+	@Bean(name = "driverManagerDS")
+	@Profile("mssql_itoa_env")
+	public DataSource driverManagerDatasourceMS_ITOA() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setUrl("jdbc:sqlserver://172.24.17.52:1803;databaseName=ITOA_MAIN");
+		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		ds.setUsername("ITOA_MAIN_mod");
+		ds.setPassword("f3ru9cj4");
+		return ds;
+	}
 
 	@Bean
 	public PlatformTransactionManager txManager(DataSource ds) {
@@ -87,7 +101,7 @@ public class RootConfig {
 	/*****************************************
 	 ** DataBase Initializer (DB初始化元件) **
 	 *****************************************/
-	@Bean // For Sqlite的腳本
+	@Bean
 	@Profile(value = { "sqlite_env" , "mssql_env" })
 	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		final DataSourceInitializer initializer = new DataSourceInitializer();
@@ -106,6 +120,7 @@ public class RootConfig {
 		
 		switch (springActiveProfile) {
 			case "mssql_env":
+			case "mssql_itoa_env":
 				populator.addScript(this.schemaScript_MSSQL);
 				populator.addScript(this.dataScript_MSSQL);
 				break;
@@ -120,7 +135,7 @@ public class RootConfig {
 		return populator;
 	}
 
-	@Bean
+	@Bean(name = "sqlSessionFactoryBean")
 	public SqlSessionFactory sqlSessionFactoryBean(@Qualifier("driverManagerDS") DataSource ds, ApplicationContext applicationContext) throws Exception {
 		System.out.println("啟用連線池：" + ds);
 		final SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
@@ -145,10 +160,18 @@ public class RootConfig {
 	public static void main(String[] args) {
 		
 //		System.setProperty("spring.profiles.active", "sqlite_env");
-		System.setProperty("spring.profiles.active", "mssql_env");
+//		System.setProperty("spring.profiles.active", "mssql_env");
+		System.setProperty("spring.profiles.active", "mssql_itoa_env");
 		
 		// 測試自動建表 & 填充資料
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);
+		
+		try {
+			String dsName = ctx.getBean(DataSource.class).getConnection().getMetaData().getDatabaseProductName();
+			System.out.println("資料庫廠商 : " + dsName);
+		} catch (BeansException | SQLException e) {
+			e.printStackTrace();
+		}
 		
 		ctx.close();
 	}

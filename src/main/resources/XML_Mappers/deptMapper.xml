@@ -97,6 +97,18 @@
 		</foreach>
 	</insert>
 	
+	<!-- 批量新增 V3 -->
+	<insert id="addDeptsBatchV3" parameterType="net.coderbee.mybatis.batch.BatchParameter">
+		INSERT INTO z40180_deptTB ( "dname" , "loc" ) 
+		VALUES ( #{ deptName } , #{ deptLoc } );
+	</insert>
+	
+	<!-- 批量新增 V4 (insert by Map) -->
+	<insert id="addDeptsBatchV3_ByMap" parameterType="net.coderbee.mybatis.batch.BatchParameter">
+		INSERT INTO z40180_deptTB ( "dname" , "loc" ) 
+		VALUES ( #{ deptName } , #{ deptLoc } );
+	</insert>
+	
 	<!-- 批量更新(Sqlite會報錯) -->
 	<update id="updateDeptsBatch" parameterType="java.util.List">
 		<foreach item="itemDept" collection="deptList" index="ind" separator=";" open="" close="">  

@@ -14,7 +14,9 @@
 	</typeHandlers>
 	
 	<plugins>
-		<plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/>
+		<plugin interceptor="net.coderbee.mybatis.batch.BatchParameterHandler" />
+		<plugin interceptor="net.coderbee.mybatis.batch.BatchStatementHandler" />
+		<!-- <plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/> -->
 	</plugins>
 	
 </configuration>  

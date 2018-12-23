@@ -30,13 +30,14 @@ import com.ctbc.mapper.DeptMapper;
 import com.ctbc.model.vo.DeptVO;
 
 import _01_Config.RootConfig;
+import net.coderbee.mybatis.batch.BatchParameter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(classes = { RootConfig.class })
 @Transactional
 //@ActiveProfiles(value = {"sqlite_env"})
-@ActiveProfiles(value = {"mssql_env"})
+@ActiveProfiles(value = { "mssql_env" })
 public class TestDeptDao {
 
 	@Rule
@@ -62,6 +63,7 @@ public class TestDeptDao {
 		System.out.println(String.format(" ======================== %s ======================= ", testCaseName.getMethodName()));
 		System.out.println(" ========================================================= ");
 	}
+
 	@After
 	public void tearDown() throws Exception {
 		System.out.println(" ================================================================================ \n");
@@ -115,7 +117,7 @@ public class TestDeptDao {
 	}
 
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_006() throws SQLException {
 		int pen = deptMapper.addDept(new DeptVO("國防部", "博愛區"));
@@ -172,7 +174,7 @@ public class TestDeptDao {
 		List<DeptVO> dList = new ArrayList<>();
 		dList.add(new DeptVO(10, "交通部1", "大安區1"));
 		dList.add(new DeptVO(20, "交通部2", "大安區2"));
-		
+
 		int pen;
 		try {
 			pen = deptMapper.updateDeptsBatch(dList);
@@ -191,12 +193,12 @@ public class TestDeptDao {
 		List<DeptVO> dList = new ArrayList<>();
 		dList.add(new DeptVO(10, "國防部_111", "中正區_111"));
 		dList.add(new DeptVO(20, "國防部_222", "中正區_222"));
-		
+
 		int pen = deptMapper.updateDeptsBatchForSqlite(dList);
 		System.err.println("update batch success : " + pen + " 筆");
 		this.getAll();
 	}
-	
+
 	@Test
 	@Ignore
 	@Rollback(false)
@@ -204,19 +206,19 @@ public class TestDeptDao {
 		List<DeptVO> dList = new ArrayList<>();
 		dList.add(new DeptVO(30, "交通部_111", "大安區_111"));
 		dList.add(new DeptVO(40, "交通部_222", "大安區_222"));
-		
+
 		int pen = deptMapper.updateDeptsBatchForSqlite2(dList);
 		System.err.println("update batch success : " + pen + " 筆");
 		this.getAll();
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_014() throws SQLException {
 		Map<String, String> rtnMap = deptMapper.getDeptByIdForMap(10);
 		System.err.println(rtnMap.toString());
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_015() throws SQLException {
@@ -225,7 +227,7 @@ public class TestDeptDao {
 			System.out.println(" >>> " + hmap);
 		}
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_016() throws SQLException {
@@ -234,7 +236,7 @@ public class TestDeptDao {
 			System.out.println(">>>>>> " + deptVO.toString());
 		}
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_017() throws SQLException {
@@ -243,14 +245,14 @@ public class TestDeptDao {
 			System.out.println(" >>>>>>>>>>>> " + hmap);
 		}
 	}
-	
+
 	@Test
 	@Ignore
 	public void test_018() throws SQLException {
 		Map<String, String> deptMap = deptMapper.getDeptByIdForMapUseAnnotation(40);
 		System.err.println(" >>> " + deptMap.toString());
 	}
-	
+
 	@Test // 測試insert並獲得最新的主鍵
 	@Ignore
 	@Rollback(false)
@@ -262,21 +264,61 @@ public class TestDeptDao {
 		System.err.println("INSERT SUCCESS : " + pen + " 筆");
 		this.getAll();
 	}
-	
+
 	@Test
-//	@Ignore
+	@Ignore
 	@Rollback(false)
 	public void test_020() {
 		List<DeptVO> dList = new ArrayList<>();
-		for (int i = 1 ; i <= 2000 ; i++) {
+		for (int i = 1 ; i <= 10000 ; i++) {
 			dList.add(new DeptVO("部_" + i, "地_" + i));
 		}
-		
-		int pen = deptMapper.addDeptsBatch(dList); // 超過2100參數的錯誤
-		
+
+//		int pen = deptMapper.addDeptsBatch(dList); // 超過2100參數的錯誤
+
+//		BatchParameter<DeptVO> depts = BatchParameter.wrap(dList); // DEFAULT_BATCH_SIZE = 1000
+		BatchParameter<DeptVO> depts = BatchParameter.wrap(dList, 10); // 10: batchSize
+		int pen = deptMapper.addDeptsBatchV3(depts);
 		System.out.println("pen = " + pen);
 	}
-	
+
+	@Test
+	@Ignore
+	@Rollback(false)
+	public void test_021() {
+
+		List<Map<String, Object>> deptMapList = new ArrayList<>();
+		for (int i = 1 ; i <= 10000 ; i++) {
+			Map<String, Object> deptMap = new HashMap<>();
+			deptMap.put("deptName", "部門_" + i);
+			deptMap.put("deptLoc", "地區_" + i);
+			deptMapList.add(deptMap);
+		}
+
+		BatchParameter<Map<String, Object>> depts = BatchParameter.<Map<String, Object>> wrap(deptMapList /* , 500 */); // batchSize
+		int pen = deptMapper.addDeptsBatchV3_ByMap(depts);
+		System.out.println("pen = " + pen);
+	}
+
+	@Test
+//	@Ignore
+	@Rollback(false)
+	public void test_022() {
+
+		List<Map<String, Object>> deptMapList = new ArrayList<>();
+		for (int i = 1 ; i <= 10000 ; i++) {
+			Map<String, Object> deptMap = new HashMap<>();
+			deptMap.put("deptName", "部門_" + i);
+			deptMap.put("deptLoc", "地區_" + i);
+			deptMapList.add(deptMap);
+		}
+
+		Long start = System.currentTimeMillis();
+		BatchParameter<Map<String, Object>> depts = BatchParameter.<Map<String, Object>> wrap(deptMapList , 500);// batchSize
+		int pen = deptMapper.addDeptsBatchV3_ByMapUseAnnotation(depts);
+		System.out.println("addDeptsBatchV3_ByMapUseAnnotation >>> pen = " + pen);
+		Long end = System.currentTimeMillis();
+		System.err.println("花費時間 >>> " + (end - start) / 1000.0);
+	}
+
 }
-
-

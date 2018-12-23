@@ -3,12 +3,15 @@ package com.ctbc.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import com.ctbc.model.vo.DeptVO;
+
+import net.coderbee.mybatis.batch.BatchParameter;
 
 /**
  * (1)
@@ -51,6 +54,14 @@ public interface DeptMapper {
 	public abstract int addDeptsBatch(@Param("deptList") List<DeptVO> dList);
 	
 	public abstract int addDeptsBatchV2(@Param("list") List<DeptVO> dList);
+	
+	public abstract int addDeptsBatchV3(BatchParameter<DeptVO> dList);
+	
+	public abstract int addDeptsBatchV3_ByMap(BatchParameter<Map<String, Object>> deptMapList);
+	
+	@Insert("INSERT INTO z40180_deptTB ( [dname] , [loc] ) " + 
+			 "VALUES ( #{ deptName } , #{ deptLoc } );")
+	public abstract int addDeptsBatchV3_ByMapUseAnnotation(BatchParameter<?> deptMapList);
 	
 	public abstract int updateDeptsBatch(@Param("deptList") List<DeptVO> dList);
 	

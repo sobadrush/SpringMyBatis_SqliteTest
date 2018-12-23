@@ -109,6 +109,13 @@
 		    <version>${apache-common-ver}</version>
 		</dependency>
         
+        <!-- MYBATIS-BATCH -->
+		<dependency>
+		    <groupId>net.coderbee</groupId>
+		    <artifactId>mybatis-batch</artifactId>
+		    <version>1.1.0</version>
+		</dependency>
+        
     </dependencies>
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>

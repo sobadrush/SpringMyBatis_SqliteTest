@@ -14,7 +14,7 @@
 	</typeHandlers>
 	
 	<plugins>
-		<plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/>
+		<plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/><!-- 扩展mybatis重写mybatis执行器实现灵活批处理 : https://xiangshouxiyang.iteye.com/blog/2391203 -->
 	</plugins>
 	
 </configuration>  

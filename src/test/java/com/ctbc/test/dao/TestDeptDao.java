@@ -30,7 +30,6 @@ import com.ctbc.mapper.DeptMapper;
 import com.ctbc.model.vo.DeptVO;
 
 import _01_Config.RootConfig;
-import net.coderbee.mybatis.batch.BatchParameter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
@@ -265,60 +264,5 @@ public class TestDeptDao {
 		this.getAll();
 	}
 
-	@Test
-	@Ignore
-	@Rollback(false)
-	public void test_020() {
-		List<DeptVO> dList = new ArrayList<>();
-		for (int i = 1 ; i <= 10000 ; i++) {
-			dList.add(new DeptVO("部_" + i, "地_" + i));
-		}
-
-//		int pen = deptMapper.addDeptsBatch(dList); // 超過2100參數的錯誤
-
-//		BatchParameter<DeptVO> depts = BatchParameter.wrap(dList); // DEFAULT_BATCH_SIZE = 1000
-		BatchParameter<DeptVO> depts = BatchParameter.wrap(dList, 10); // 10: batchSize
-		int pen = deptMapper.addDeptsBatchV3(depts);
-		System.out.println("pen = " + pen);
-	}
-
-	@Test
-	@Ignore
-	@Rollback(false)
-	public void test_021() {
-
-		List<Map<String, Object>> deptMapList = new ArrayList<>();
-		for (int i = 1 ; i <= 10000 ; i++) {
-			Map<String, Object> deptMap = new HashMap<>();
-			deptMap.put("deptName", "部門_" + i);
-			deptMap.put("deptLoc", "地區_" + i);
-			deptMapList.add(deptMap);
-		}
-
-		BatchParameter<Map<String, Object>> depts = BatchParameter.<Map<String, Object>> wrap(deptMapList /* , 500 */); // batchSize
-		int pen = deptMapper.addDeptsBatchV3_ByMap(depts);
-		System.out.println("pen = " + pen);
-	}
-
-	@Test
-//	@Ignore
-	@Rollback(false)
-	public void test_022() {
-
-		List<Map<String, Object>> deptMapList = new ArrayList<>();
-		for (int i = 1 ; i <= 10000 ; i++) {
-			Map<String, Object> deptMap = new HashMap<>();
-			deptMap.put("deptName", "部門_" + i);
-			deptMap.put("deptLoc", "地區_" + i);
-			deptMapList.add(deptMap);
-		}
-
-		Long start = System.currentTimeMillis();
-		BatchParameter<Map<String, Object>> depts = BatchParameter.<Map<String, Object>> wrap(deptMapList , 500);// batchSize
-		int pen = deptMapper.addDeptsBatchV3_ByMapUseAnnotation(depts);
-		System.out.println("addDeptsBatchV3_ByMapUseAnnotation >>> pen = " + pen);
-		Long end = System.currentTimeMillis();
-		System.err.println("花費時間 >>> " + (end - start) / 1000.0);
-	}
 
 }

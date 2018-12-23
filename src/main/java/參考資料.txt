@@ -67,4 +67,7 @@ https://my.oschina.net/MrBamboo/blog/882745
 ※※※【扩展mybatis重写mybatis执行器实现灵活批处理】※※※
 http://xiangshouxiyang.iteye.com/blog/2391203
 
+※※※ 基于 MyBatis 执行 SQL 批量操作的插件 ※※※
+https://github.com/wen866595/MyBatis-batch
+
 

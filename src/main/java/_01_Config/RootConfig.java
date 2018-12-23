@@ -160,8 +160,8 @@ public class RootConfig {
 	public static void main(String[] args) {
 		
 //		System.setProperty("spring.profiles.active", "sqlite_env");
-//		System.setProperty("spring.profiles.active", "mssql_env");
-		System.setProperty("spring.profiles.active", "mssql_itoa_env");
+		System.setProperty("spring.profiles.active", "mssql_env");
+//		System.setProperty("spring.profiles.active", "mssql_itoa_env");
 		
 		// 測試自動建表 & 填充資料
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RootConfig.class);

@@ -262,6 +262,21 @@ public class TestDeptDao {
 		System.err.println("INSERT SUCCESS : " + pen + " 筆");
 		this.getAll();
 	}
+	
+	@Test
+//	@Ignore
+	@Rollback(false)
+	public void test_020() {
+		List<DeptVO> dList = new ArrayList<>();
+		for (int i = 1 ; i <= 2000 ; i++) {
+			dList.add(new DeptVO("部_" + i, "地_" + i));
+		}
+		
+		int pen = deptMapper.addDeptsBatch(dList); // 超過2100參數的錯誤
+		
+		System.out.println("pen = " + pen);
+	}
+	
 }
 
 

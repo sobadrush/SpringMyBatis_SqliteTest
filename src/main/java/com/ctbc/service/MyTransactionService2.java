@@ -27,7 +27,7 @@ public class MyTransactionService2 {
 	private DeptMapper deptMapper;
 
 	@Autowired
-	private EmpMapper empMapper;
+	private EmpMapper empMapper; 
 	
 
 	public static void main(String[] args) {

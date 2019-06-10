@@ -14,13 +14,11 @@
 	</typeHandlers>
 	
 	<plugins>
-<<<<<<< HEAD
 		<plugin interceptor="net.coderbee.mybatis.batch.BatchParameterHandler" />
 		<plugin interceptor="net.coderbee.mybatis.batch.BatchStatementHandler" />
 		<!-- <plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/> -->
-=======
+
 		<plugin interceptor="com.ctbc.mybatis.util.ProxyExecutorInterceptor"/><!-- 扩展mybatis重写mybatis执行器实现灵活批处理 : https://xiangshouxiyang.iteye.com/blog/2391203 -->
->>>>>>> b2c8c1837deb9eb8d8650cb121bb0b263352d168
 	</plugins>
 	
 </configuration>  
